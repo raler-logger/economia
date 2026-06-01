@@ -1,0 +1,1423 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>InFormatics Store</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #050810;
+    --bg2: #090d1a;
+    --surface: #0d1425;
+    --surface2: #111827;
+    --accent: #00d4ff;
+    --accent2: #7b2fff;
+    --accent3: #ff2f7b;
+    --gold: #ffd700;
+    --text: #e0eaff;
+    --muted: #5a6a8a;
+    --border: rgba(0,212,255,0.15);
+    --glow: 0 0 20px rgba(0,212,255,0.4);
+    --glow2: 0 0 20px rgba(123,47,255,0.4);
+  }
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 16px;
+    overflow-x: hidden;
+    cursor: default;
+  }
+
+  /* BACKGROUND GRID */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,212,255,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,212,255,0.04) 1px, transparent 1px);
+    background-size: 50px 50px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* NOISE TEXTURE */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.5;
+  }
+
+  section, nav, footer, .hero { position: relative; z-index: 1; }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 3px; }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 48px;
+    background: rgba(5,8,16,0.85);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-logo {
+    font-family: 'Orbitron', monospace;
+    font-size: 1.5rem;
+    font-weight: 900;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: 2px;
+  }
+
+  .nav-logo span {
+    color: var(--accent3);
+    -webkit-text-fill-color: var(--accent3);
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 32px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    transition: color 0.3s;
+    font-family: 'Share Tech Mono', monospace;
+  }
+
+  .nav-links a:hover { color: var(--accent); text-shadow: var(--glow); }
+
+  .nav-cta {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: #fff !important;
+    -webkit-text-fill-color: #fff !important;
+    padding: 8px 20px;
+    border-radius: 4px;
+    font-weight: 700 !important;
+  }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 120px 24px 80px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    pointer-events: none;
+  }
+
+  .hero-orb-1 {
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(0,212,255,0.12) 0%, transparent 70%);
+    top: -100px; left: -150px;
+    animation: float 8s ease-in-out infinite;
+  }
+
+  .hero-orb-2 {
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(123,47,255,0.12) 0%, transparent 70%);
+    bottom: -100px; right: -100px;
+    animation: float 10s ease-in-out infinite reverse;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-30px); }
+  }
+
+  .hero-badge {
+    display: inline-block;
+    background: rgba(0,212,255,0.1);
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.75rem;
+    padding: 6px 16px;
+    border-radius: 20px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 32px;
+    animation: pulse-border 2s infinite;
+  }
+
+  @keyframes pulse-border {
+    0%, 100% { box-shadow: 0 0 10px rgba(0,212,255,0.2); }
+    50% { box-shadow: 0 0 25px rgba(0,212,255,0.5); }
+  }
+
+  .hero h1 {
+    font-family: 'Orbitron', monospace;
+    font-size: clamp(2.5rem, 6vw, 5.5rem);
+    font-weight: 900;
+    line-height: 1.05;
+    margin-bottom: 24px;
+    letter-spacing: -1px;
+  }
+
+  .hero h1 .line1 {
+    display: block;
+    background: linear-gradient(90deg, #fff, var(--accent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .hero h1 .line2 {
+    display: block;
+    background: linear-gradient(90deg, var(--accent2), var(--accent3));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .hero-sub {
+    font-size: 1.15rem;
+    color: var(--muted);
+    max-width: 560px;
+    line-height: 1.7;
+    margin-bottom: 48px;
+    font-weight: 300;
+  }
+
+  .hero-btns {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, var(--accent), #006aff);
+    color: #fff;
+    padding: 14px 36px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-family: 'Orbitron', monospace;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 0 30px rgba(0,212,255,0.3);
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 50px rgba(0,212,255,0.5);
+  }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--text);
+    padding: 14px 36px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-family: 'Orbitron', monospace;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    border: 1px solid var(--border);
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+
+  .btn-ghost:hover {
+    border-color: var(--accent2);
+    color: var(--accent2);
+    box-shadow: 0 0 20px rgba(123,47,255,0.2);
+  }
+
+  /* STATS */
+  .stats {
+    display: flex;
+    gap: 48px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 72px;
+    padding-top: 48px;
+    border-top: 1px solid var(--border);
+  }
+
+  .stat {
+    text-align: center;
+  }
+
+  .stat-num {
+    font-family: 'Orbitron', monospace;
+    font-size: 2rem;
+    font-weight: 900;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .stat-label {
+    font-size: 0.8rem;
+    color: var(--muted);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-top: 4px;
+    font-family: 'Share Tech Mono', monospace;
+  }
+
+  /* SECTIONS */
+  section {
+    padding: 100px 48px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .section-tag {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--accent);
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .section-title {
+    font-family: 'Orbitron', monospace;
+    font-size: clamp(1.8rem, 3vw, 2.8rem);
+    font-weight: 700;
+    margin-bottom: 16px;
+    line-height: 1.2;
+  }
+
+  .section-title span { color: var(--accent); }
+
+  .section-sub {
+    color: var(--muted);
+    max-width: 500px;
+    line-height: 1.7;
+    margin-bottom: 60px;
+  }
+
+  /* PRODUCTS GRID */
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+  }
+
+  .product-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 32px;
+    transition: all 0.4s;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+  }
+
+  .product-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(0,212,255,0.05), transparent);
+    opacity: 0;
+    transition: opacity 0.4s;
+  }
+
+  .product-card:hover {
+    border-color: rgba(0,212,255,0.4);
+    transform: translateY(-6px);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 40px rgba(0,212,255,0.1);
+  }
+
+  .product-card:hover::before { opacity: 1; }
+
+  .product-icon {
+    font-size: 3rem;
+    margin-bottom: 20px;
+    display: block;
+    filter: drop-shadow(0 0 10px rgba(0,212,255,0.3));
+  }
+
+  .product-category {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--accent);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .product-name {
+    font-family: 'Orbitron', monospace;
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 12px;
+  }
+
+  .product-desc {
+    color: var(--muted);
+    font-size: 0.9rem;
+    line-height: 1.6;
+    margin-bottom: 24px;
+  }
+
+  .product-price {
+    font-family: 'Orbitron', monospace;
+    font-size: 1.4rem;
+    font-weight: 900;
+    color: var(--accent);
+    margin-bottom: 4px;
+  }
+
+  .product-price-sub {
+    font-size: 0.8rem;
+    color: var(--muted);
+    margin-bottom: 20px;
+  }
+
+  .btn-buy {
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+    background: rgba(0,212,255,0.1);
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    padding: 10px 20px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+    transition: all 0.3s;
+  }
+
+  .btn-buy:hover {
+    background: var(--accent);
+    color: var(--bg);
+    box-shadow: var(--glow);
+  }
+
+  .badge-hot {
+    position: absolute;
+    top: 16px; right: 16px;
+    background: var(--accent3);
+    color: #fff;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.65rem;
+    padding: 4px 10px;
+    border-radius: 20px;
+    letter-spacing: 1px;
+  }
+
+  /* DISCORD BOTS */
+  #bots { background: var(--bg2); padding: 100px 0; }
+  #bots > .inner { max-width: 1400px; margin: 0 auto; padding: 0 48px; }
+
+  .plans-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-top: 0;
+  }
+
+  @media (max-width: 900px) {
+    .plans-grid { grid-template-columns: 1fr; }
+    nav { padding: 16px 20px; }
+    .nav-links { display: none; }
+    section { padding: 60px 20px; }
+    #bots > .inner { padding: 0 20px; }
+  }
+
+  .plan-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 40px 32px;
+    text-align: center;
+    position: relative;
+    transition: all 0.4s;
+    overflow: hidden;
+  }
+
+  .plan-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--plan-color, var(--accent)), transparent);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .plan-card:hover::after { opacity: 1; }
+  .plan-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 30px 80px rgba(0,0,0,0.5), 0 0 50px color-mix(in srgb, var(--plan-color, var(--accent)) 15%, transparent);
+    border-color: color-mix(in srgb, var(--plan-color, var(--accent)) 50%, transparent);
+  }
+
+  .plan-card.featured {
+    border-color: var(--accent2);
+    background: linear-gradient(135deg, var(--surface) 0%, rgba(123,47,255,0.08) 100%);
+    transform: scale(1.03);
+  }
+
+  .plan-card.featured::after { opacity: 1; --plan-color: var(--accent2); }
+
+  .plan-featured-badge {
+    position: absolute;
+    top: -1px; left: 50%; transform: translateX(-50%);
+    background: var(--accent2);
+    color: #fff;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.65rem;
+    padding: 4px 16px;
+    border-radius: 0 0 8px 8px;
+    letter-spacing: 2px;
+    white-space: nowrap;
+  }
+
+  .plan-icon { font-size: 2.5rem; margin-bottom: 16px; }
+
+  .plan-name {
+    font-family: 'Orbitron', monospace;
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+
+  .plan-price {
+    font-family: 'Orbitron', monospace;
+    font-size: 2.8rem;
+    font-weight: 900;
+    margin: 20px 0 4px;
+    background: linear-gradient(90deg, var(--plan-color, var(--accent)), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .plan-period {
+    color: var(--muted);
+    font-size: 0.85rem;
+    margin-bottom: 28px;
+    font-family: 'Share Tech Mono', monospace;
+  }
+
+  .plan-features {
+    list-style: none;
+    margin-bottom: 32px;
+    text-align: left;
+  }
+
+  .plan-features li {
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    font-size: 0.9rem;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'Rajdhani', sans-serif;
+  }
+
+  .plan-features li .check {
+    color: var(--accent);
+    font-size: 1rem;
+    flex-shrink: 0;
+  }
+
+  .plan-basic { --plan-color: #4ade80; }
+  .plan-mid { --plan-color: var(--accent); }
+  .plan-pro { --plan-color: var(--accent2); }
+
+  .btn-plan {
+    display: block;
+    width: 100%;
+    padding: 14px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-family: 'Orbitron', monospace;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    transition: all 0.3s;
+    border: none;
+    cursor: pointer;
+  }
+
+  .btn-plan-basic {
+    background: rgba(74,222,128,0.1);
+    border: 1px solid #4ade80;
+    color: #4ade80;
+  }
+  .btn-plan-basic:hover { background: #4ade80; color: #000; box-shadow: 0 0 30px rgba(74,222,128,0.3); }
+
+  .btn-plan-mid {
+    background: rgba(0,212,255,0.1);
+    border: 1px solid var(--accent);
+    color: var(--accent);
+  }
+  .btn-plan-mid:hover { background: var(--accent); color: #000; box-shadow: var(--glow); }
+
+  .btn-plan-pro {
+    background: linear-gradient(135deg, var(--accent2), var(--accent3));
+    color: #fff;
+    border: none;
+  }
+  .btn-plan-pro:hover { transform: scale(1.03); box-shadow: 0 0 40px rgba(123,47,255,0.5); }
+
+  /* PAYPAL BANNER */
+  .paypal-banner {
+    background: linear-gradient(135deg, #0070ba 0%, #003087 100%);
+    border-radius: 16px;
+    padding: 40px 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    flex-wrap: wrap;
+    margin: 60px 0 0;
+    border: 1px solid rgba(0,112,186,0.4);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+  }
+
+  .paypal-info h3 {
+    font-family: 'Orbitron', monospace;
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+
+  .paypal-info p {
+    color: rgba(255,255,255,0.7);
+    font-size: 0.9rem;
+  }
+
+  .btn-paypal {
+    background: #ffc439;
+    color: #003087;
+    padding: 14px 36px;
+    border-radius: 50px;
+    text-decoration: none;
+    font-family: 'Orbitron', monospace;
+    font-size: 0.85rem;
+    font-weight: 900;
+    letter-spacing: 1px;
+    white-space: nowrap;
+    transition: all 0.3s;
+    box-shadow: 0 4px 20px rgba(255,196,57,0.3);
+  }
+
+  .btn-paypal:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 40px rgba(255,196,57,0.5);
+  }
+
+  /* DIVIDER */
+  .divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border), transparent);
+    margin: 0 48px;
+  }
+
+  /* FOOTER */
+  footer {
+    background: var(--bg2);
+    border-top: 1px solid var(--border);
+    padding: 60px 48px 40px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 48px;
+    max-width: 1400px;
+    margin: 0 auto 48px;
+  }
+
+  @media (max-width: 768px) {
+    .footer-grid { grid-template-columns: 1fr; }
+    footer { padding: 40px 20px; }
+  }
+
+  .footer-brand p {
+    color: var(--muted);
+    font-size: 0.9rem;
+    line-height: 1.7;
+    margin-top: 12px;
+    max-width: 300px;
+  }
+
+  .footer-col h4 {
+    font-family: 'Orbitron', monospace;
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+    color: var(--accent);
+    margin-bottom: 20px;
+    text-transform: uppercase;
+  }
+
+  .footer-col ul { list-style: none; }
+  .footer-col ul li { margin-bottom: 10px; }
+  .footer-col ul a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: color 0.3s;
+  }
+  .footer-col ul a:hover { color: var(--accent); }
+
+  .footer-bottom {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding-top: 32px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: gap;
+    gap: 16px;
+  }
+
+  .footer-bottom p {
+    color: var(--muted);
+    font-size: 0.8rem;
+    font-family: 'Share Tech Mono', monospace;
+  }
+
+  .footer-bottom a { color: var(--accent); text-decoration: none; }
+
+  /* COOKIE BANNER */
+  #cookie-banner {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: min(680px, calc(100vw - 32px));
+    background: rgba(9,13,26,0.97);
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px 32px;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    z-index: 9999;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.7), 0 0 40px rgba(0,212,255,0.05);
+    transition: all 0.5s;
+    flex-wrap: wrap;
+  }
+
+  #cookie-banner.hidden {
+    opacity: 0;
+    transform: translateX(-50%) translateY(120%);
+    pointer-events: none;
+  }
+
+  .cookie-icon { font-size: 2rem; flex-shrink: 0; }
+
+  .cookie-text { flex: 1; min-width: 200px; }
+  .cookie-text strong {
+    font-family: 'Orbitron', monospace;
+    font-size: 0.85rem;
+    color: var(--accent);
+    display: block;
+    margin-bottom: 4px;
+  }
+  .cookie-text p {
+    font-size: 0.82rem;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+  .cookie-text a { color: var(--accent); text-decoration: none; }
+
+  .cookie-btns { display: flex; gap: 12px; flex-wrap: wrap; }
+
+  .btn-cookie-accept {
+    background: linear-gradient(135deg, var(--accent), #006aff);
+    color: #fff;
+    border: none;
+    padding: 10px 24px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: 'Orbitron', monospace;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    white-space: nowrap;
+    transition: all 0.3s;
+  }
+
+  .btn-cookie-accept:hover { box-shadow: var(--glow); transform: scale(1.02); }
+
+  .btn-cookie-reject {
+    background: transparent;
+    color: var(--muted);
+    border: 1px solid var(--border);
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.75rem;
+    white-space: nowrap;
+    transition: all 0.3s;
+  }
+
+  .btn-cookie-reject:hover { color: var(--text); border-color: var(--muted); }
+
+  /* SCROLL ANIMATIONS */
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* SEPARATOR LINE */
+  .sep-line {
+    width: 60px; height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    border-radius: 2px;
+    margin-bottom: 32px;
+  }
+
+  /* GLITCH EFFECT on logo */
+  @keyframes glitch {
+    0%, 94%, 100% { clip-path: none; transform: none; }
+    95% { clip-path: polygon(0 20%, 100% 20%, 100% 45%, 0 45%); transform: translateX(-3px); }
+    96% { clip-path: polygon(0 55%, 100% 55%, 100% 75%, 0 75%); transform: translateX(3px); }
+    97% { clip-path: none; transform: none; }
+  }
+
+  .nav-logo { animation: glitch 5s infinite; }
+
+
+  /* CATEGORY TABS */
+  .cat-tabs {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 40px;
+  }
+
+  .cat-tab {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-family: 'Orbitron', monospace;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+
+  .cat-tab:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .cat-tab.active {
+    background: rgba(0,212,255,0.12);
+    border-color: var(--accent);
+    color: var(--accent);
+    box-shadow: var(--glow);
+  }
+
+  .cat-panel { display: none; }
+  .cat-panel.active { display: block; }
+
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">InFormatics</div>
+  <ul class="nav-links">
+    <li><a href="#productos">Productos</a></li>
+    <li><a href="#bots">Discord Bots</a></li>
+    <li><a href="#contacto">Contacto</a></li>
+    <li><a href="https://paypal.me/DEVraler/" target="_blank" class="nav-cta">Pagar</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-orb hero-orb-1"></div>
+  <div class="hero-orb hero-orb-2"></div>
+
+  <div class="hero-badge">⚡ Tecnología de próxima generación</div>
+
+  <h1>
+    <span class="line1">Tu tienda tech</span>
+    <span class="line2">del futuro</span>
+  </h1>
+
+  <p class="hero-sub">
+    Teléfonos, ordenadores, servidores, NAS y bots de Discord. Todo en un solo lugar, con precios que no te creerás.
+  </p>
+
+  <div class="hero-btns">
+    <a href="#productos" class="btn-primary">Ver productos</a>
+    <a href="#bots" class="btn-ghost">Discord Bots</a>
+  </div>
+
+  <div class="stats">
+    <div class="stat">
+      <div class="stat-num">500+</div>
+      <div class="stat-label">Clientes</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">99.9%</div>
+      <div class="stat-label">Uptime</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">24/7</div>
+      <div class="stat-label">Soporte</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">4.9★</div>
+      <div class="stat-label">Valoración</div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- PRODUCTOS -->
+<section id="productos">
+  <div class="section-tag">// Catálogo</div>
+  <h2 class="section-title">Nuestros <span>Productos</span></h2>
+  <div class="sep-line"></div>
+  <p class="section-sub">Hardware de última generación seleccionado para profesionales y entusiastas de la tecnología.</p>
+
+  <div class="cat-tabs">
+    <button class="cat-tab active" onclick="showCat('telefonos')">📱 Teléfonos</button>
+    <button class="cat-tab" onclick="showCat('ordenadores')">💻 Ordenadores</button>
+    <button class="cat-tab" onclick="showCat('servidores')">🖥️ Servidores</button>
+    <button class="cat-tab" onclick="showCat('nas')">🗄️ NAS</button>
+  </div>
+
+  <!-- TELÉFONOS -->
+  <div class="cat-panel active" id="cat-telefonos">
+    <div class="products-grid">
+      <div class="product-card reveal">
+        <div class="badge-hot">🔥 Top ventas</div>
+        <span class="product-icon">📱</span>
+        <div class="product-category">// Gama Alta</div>
+        <div class="product-name">Samsung Galaxy S25 Ultra</div>
+        <p class="product-desc">6.9" QHD+, Snapdragon 8 Elite, 200MP, 5000mAh, S Pen incluido. 256GB.</p>
+        <div class="product-price">1.199€</div>
+        <div class="product-price-sub">Desbloqueado · Garantía 2 años</div>
+        <a href="https://paypal.me/DEVraler/1199" target="_blank" class="btn-buy">Comprar vía PayPal →</a>
+      </div>
+      <div class="product-card reveal">
+        <span class="product-icon">📱</span>
+        <div class="product-category">// Gama Alta</div>
+        <div class="product-name">iPhone 16 Pro Max</div>
+        <p class="product-desc">6.9" Super Retina XDR, chip A18 Pro, cámara 48MP ProRAW, titanio. 256GB.</p>
+        <div class="product-price">1.329€</div>
+        <div class="product-price-sub">Desbloqueado · Garantía 2 años</div>
+        <a href="https://paypal.me/DEVraler/1329" target="_blank" class="btn-buy">Comprar vía PayPal →</a>
+      </div>
+      <div class="product-card reveal">
+        <span class="product-icon">📱</span>
+        <div class="product-category">// Gama Media</div>
+        <div class="product-name">Xiaomi 14T Pro</div>
+        <p class="product-desc">6.67" AMOLED 144Hz, Dimensity 9300+, 50MP Leica, 5000mAh, 120W. 256GB.</p>
+        <div class="product-price">699€</div>
+        <div class="product-price-sub">Desbloqueado · Garantía 2 años</div>
+        <a href="https://paypal.me/DEVraler/699" target="_blank" class="btn-buy">Comprar vía PayPal →</a>
+      </div>
+      <div class="product-card reveal">
+        <div class="badge-hot">⚡ Oferta</div>
+        <span class="product-icon">📱</span>
+        <div class="product-category">// Gama Media</div>
+        <div class="product-name">Google Pixel 9</div>
+        <p class="product-desc">6.3" OLED 120Hz, Tensor G4, 50MP, 7 años de actualizaciones. 128GB.</p>
+        <div class="product-price">799€</div>
+        <div class="product-price-sub">Desbloqueado · Garantía 2 años</div>
+        <a href="https://paypal.me/DEVraler/799" target="_blank" class="btn-buy">Comprar vía PayPal →</a>
+      </div>
+      <div class="product-card reveal">
+        <span class="product-icon">📱</span>
+        <div class="product-category">// Gama Básica</div>
+        <div class="product-name">Samsung Galaxy A55</div>
+        <p class="product-desc">6.6" Super AMOLED, Exynos 1480, 50MP, 5000mAh, IP67. 128GB.</p>
+        <div class="product-price">349€</div>
+        <div class="product-price-sub">Desbloqueado · Garantía 2 años</div>
+        <a href="https://paypal.me/DEVraler/349" target="_blank" class="btn-buy">Comprar vía PayPal →</a>
+      </div>
+      <div class="product-card reveal">
+        <span class="product-icon">📱</span>
+        <div class="product-category">// Gama Básica</div>
+        <div class="product-name">Motorola Edge 50 Neo</div>
+        <p class="product-desc">6.36" pOLED 120Hz, Dimensity 7300, 50MP, 4310mAh, 68W. 256GB.</p>
+        <div class="product-price">299€</div>
+        <div class="product-price-sub">Desbloqueado · Garantía 2 años</div>
+        <a href="https://paypal.me/DEVraler/299" target="_blank" class="btn-buy">Comprar vía PayPal →</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ORDENADORES -->
+  <div class="cat-panel" id="cat-ordenadores">
+    <div class="products-grid">
+      <div class="product-card reveal">
+        <div class="badge-hot">🔥 Best seller</div>
+        <span class="product-icon">💻</span>
+        <div class="product-category">// Portátil · Productividad</div>
+        <div class="product-name">MacBook Pro 14" M4</div>
+        <p class="product-desc">Chip M4 Pro, 24GB RAM, SSD 512GB, pantalla Liquid Retina XDR, batería 22h.</p>
+        <div class="product-price">1.999€</div>
+        <div class="product-price-sub">Garantía 2 años · AppleCare opcional</div>
+        <a href="https://paypal.me/DEVraler/1999" target="_blank" class="btn-buy">Comprar vía PayPal →</a>
+      </div>
+      <div class="product-card reveal">
+        <span class="product-icon">💻</span>
+        <div class="product-category">// Portátil · Gaming</div>
+        <div class="product-name">ASUS ROG Zephyrus G16</div>
+        <p class="product-desc">Intel Core Ultra 9, RTX 4080, 32GB DDR5, 1TB NVMe, 16" QHD+ 240Hz.</p>
+        <div class="product-price">2.399€</div>
+        <div class="product-price-sub">Garantía 2 años</div>
+        <a href="https://paypal.me/DEVraler/2399" target="_blank" class="btn-buy">Comprar vía PayPal →</a>
+      </div>
+      <div class="product-card reveal">
+        <span class="product-icon">💻</span>
+        <div class="product-category">// Portátil · Trabajo</div>
+        <div class="product-name">Lenovo ThinkPad X1 Carbon</div>
+        <p class="product-desc">Intel Core Ultra 7, 16GB LPDDR5, 512GB NVMe, 14" IPS 2.8K, 1.12kg.</p>
+        <div class="product-price">1.649€</div>
+        <div class="product-price-sub">Garantía 3 años on-site</div>
+        <a href="https://paypal.me/DEVraler/1649" target="_blank" class="btn-buy">Comprar vía PayPal →</a>
+      </div>
+      <div class="product-card reveal">
+        <div class="badge-hot">⚡ Potencia</div>
+        <span class="product-icon">🖥️</span>
+        <div class="product-category">// Sobremesa · Gaming</div>
+        <div class="product-name">PC Gaming RTX 4090</div>
+        <p class="product-desc">Intel i9-14900K, RTX 4090 24GB, 64GB DDR5, 2TB NVMe, torre ATX RGB.</p>
+        <div class="product-price">3.799€</div>
+        <div class="product-price-sub">Montado y testeado · Garantía 2 años</div>
+        <a href="https://paypal.me/DEVraler/3799" target="_blank" class="btn-buy">Comprar vía PayPal →</a>
+      </div>
+      <div class="product-card reveal">
+        <span class="product-icon">🖥️</span>
+        <div class="product-category">// Sobremesa · Ofimática</div>
+        <div class="product-name">PC Oficina i5 Gen14</div>
+        <p class="product-desc">Intel Core i5-14400, 16GB DDR5, 512GB NVMe, Windows 11 Pro, mini torre.</p>
+        <div class="product-price">749€</div>
+        <div class="product-price-sub">Listo para usar · Garantía 2 años</div>
+        <a href="https://paypal.me/DEVraler/749" target="_blank" class="btn-buy">Comprar vía PayPal →</a>
+      </div>
+      <div class="product-card reveal">
+        <span class="product-icon">💻</span>
+        <div class="product-category">// Portátil · Relación calidad/precio</div>
+        <div class="product-name">Acer Swift Go 14</div>
+        <p class="product-desc">AMD Ryzen 7 8840U, 16GB LPDDR5X, 512GB SSD, 14" 2.8K OLED, 1.25kg.</p>
+        <div class="product-price">899€</div>
+        <div class="product-price-sub">Garantía 2 años</div>
+        <a href="https://paypal.me/DEVraler/899" target="_blank" class="btn-buy">Comprar vía PayPal →</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- SERVIDORES -->
+  <div class="cat-panel" id="cat-servidores">
+    <div class="products-grid">
+      <div class="product-card reveal">
+        <div class="badge-hot">🔥 Empresas</div>
+        <span class="product-icon">🖥️</span>
+        <div class="product-category">// Rack 1U</div>
+        <div class="product-name">Dell PowerEdge R650xs</div>
+        <p class="product-desc">2× Intel Xeon Silver 4314, 128GB ECC DDR4, 4× 1.2TB SAS 10K, RAID H755.</p>
+        <div class="product-price">4.999€</div>
+        <div class="product-price-sub">Config. estándar · Garantía 3 años</div>
+        <a href="https://paypal.me/DEVraler/4999" target="_blank" class="btn-buy">Comprar vía PayPal →</a>
+      </div>
+      <div class="product-card reveal">
+        <span class="product-icon">🖥️</span>
+        <div class="product-category">// Rack 2U</div>
+        <div class="product-name">HPE ProLiant DL380 Gen11</div>
+        <p class="product-desc">2× Intel Xeon Gold 6414U, 256GB ECC, 8× SFF Hot-Plug, iLO6, dual PSU.</p>
+        <div class="product-price">7.499€</div>
+        <div class="product-price-sub">Config. estándar · Garantía 3 años</div>
+        <a href="https://paypal.me/DEVraler/7499" target="_blank" class="btn-buy">Comprar vía PayPal →</a>
+      </div>
+      <div class="product-card reveal">
+        <span class="product-icon">🖥️</span>
+        <div class="product-category">// Torre</div>
+        <div class="product-name">Dell PowerEdge T550</div>
+        <p class="product-desc">Intel Xeon Silver 4310, 64GB ECC, 4× 2TB SATA, PERC H755, ideal PYME.</p>
+        <div class="product-price">2.899€</div>
+        <div class="product-price-sub">Rack o torre · Garantía 3 años</div>
+        <a href="https://paypal.me/DEVraler/2899" target="_blank" class="btn-buy">Comprar vía PayPal →</a>
+      </div>
+      <div class="product-card reveal">
+        <div class="badge-hot">⚡ IA / GPU</div>
+        <span class="product-icon">🖥️</span>
+        <div class="product-category">// GPU / IA</div>
+        <div class="product-name">Supermicro A+ 4124GS-TNR</div>
+        <p class="product-desc">AMD EPYC 9354P, 512GB ECC DDR5, 8× GPU NVLink, NVMe U.2, ideal para IA.</p>
+        <div class="product-price">18.999€</div>
+        <div class="product-price-sub">Config. a medida · Garantía 3 años</div>
+        <a href="https://paypal.me/DEVraler/18999" target="_blank" class="btn-buy">Comprar vía PayPal →</a>
+      </div>
+      <div class="product-card reveal">
+        <span class="product-icon">🖥️</span>
+        <div class="product-category">// Micro / Home Lab</div>
+        <div class="product-name">Intel NUC Pro Server</div>
+        <p class="product-desc">Intel Core i7-1360P, 32GB DDR5, 1TB NVMe, 2.5GbE dual, sin ventilador.</p>
+        <div class="product-price">899€</div>
+        <div class="product-price-sub">Tamaño mini · Garantía 2 años</div>
+        <a href="https://paypal.me/DEVraler/899" target="_blank" class="btn-buy">Comprar vía PayPal →</a>
+      </div>
+      <div class="product-card reveal">
+        <span class="product-icon">🖥️</span>
+        <div class="product-category">// Virtualización</div>
+        <div class="product-name">Fujitsu Primergy RX2540 M7</div>
+        <p class="product-desc">2× Xeon Gold 5418Y, 192GB ECC, iRMC S6, 8× SFF, dual PSU 800W Titanio.</p>
+        <div class="product-price">5.799€</div>
+        <div class="product-price-sub">Ideal VMware/Proxmox · Garantía 3 años</div>
+        <a href="https://paypal.me/DEVraler/5799" target="_blank" class="btn-buy">Comprar vía PayPal →</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- NAS -->
+  <div class="cat-panel" id="cat-nas">
+    <div class="products-grid">
+      <div class="product-card reveal">
+        <div class="badge-hot">🔥 Más vendido</div>
+        <span class="product-icon">🗄️</span>
+        <div class="product-category">// Doméstico · 4 bahías</div>
+        <div class="product-name">Synology DS923+</div>
+        <p class="product-desc">4 bahías, AMD Ryzen R1600, 4GB ECC DDR4 (exp. 32GB), 2× M.2 NVMe, 2× 1GbE.</p>
+        <div class="product-price">549€</div>
+        <div class="product-price-sub">Sin discos · Garantía 3 años</div>
+        <a href="https://paypal.me/DEVraler/549" target="_blank" class="btn-buy">Comprar vía PayPal →</a>
+      </div>
+      <div class="product-card reveal">
+        <span class="product-icon">🗄️</span>
+        <div class="product-category">// Doméstico · 4 bahías</div>
+        <div class="product-name">QNAP TS-464</div>
+        <p class="product-desc">4 bahías, Intel Celeron N5105, 8GB DDR4, 2× M.2 PCIe, 2× 2.5GbE, HDMI 2.0.</p>
+        <div class="product-price">499€</div>
+        <div class="product-price-sub">Sin discos · Garantía 2 años</div>
+        <a href="https://paypal.me/DEVraler/499" target="_blank" class="btn-buy">Comprar vía PayPal →</a>
+      </div>
+      <div class="product-card reveal">
+        <div class="badge-hot">⚡ Pro</div>
+        <span class="product-icon">🗄️</span>
+        <div class="product-category">// Empresarial · 8 bahías</div>
+        <div class="product-name">Synology DS1823xs+</div>
+        <p class="product-desc">8 bahías, AMD Ryzen V1780B, 8GB ECC DDR4, 2× M.2, 2× 10GbE SFP+, expansión.</p>
+        <div class="product-price">1.499€</div>
+        <div class="product-price-sub">Sin discos · Garantía 3 años</div>
+        <a href="https://paypal.me/DEVraler/1499" target="_blank" class="btn-buy">Comprar vía PayPal →</a>
+      </div>
+      <div class="product-card reveal">
+        <span class="product-icon">🗄️</span>
+        <div class="product-category">// Empresarial · 8 bahías</div>
+        <div class="product-name">QNAP TVS-h874T</div>
+        <p class="product-desc">8 bahías, Intel Core i9-12900H, 64GB DDR5, Thunderbolt 4, 2× 10GbE, ZFS.</p>
+        <div class="product-price">2.199€</div>
+        <div class="product-price-sub">Sin discos · Garantía 2 años</div>
+        <a href="https://paypal.me/DEVraler/2199" target="_blank" class="btn-buy">Comprar vía PayPal →</a>
+      </div>
+      <div class="product-card reveal">
+        <span class="product-icon">🗄️</span>
+        <div class="product-category">// Compacto · 2 bahías</div>
+        <div class="product-name">Synology DS223j</div>
+        <p class="product-desc">2 bahías, Realtek RTD1619B, 1GB DDR4, perfecto para backup doméstico y Plex.</p>
+        <div class="product-price">179€</div>
+        <div class="product-price-sub">Sin discos · Garantía 2 años</div>
+        <a href="https://paypal.me/DEVraler/179" target="_blank" class="btn-buy">Comprar vía PayPal →</a>
+      </div>
+      <div class="product-card reveal">
+        <span class="product-icon">🗄️</span>
+        <div class="product-category">// Rack · 12 bahías</div>
+        <div class="product-name">Synology RS2423+</div>
+        <p class="product-desc">12 bahías rack 2U, AMD Ryzen R1600, 8GB ECC DDR4, 2× M.2, 4× 1GbE, expansión.</p>
+        <div class="product-price">1.999€</div>
+        <div class="product-price-sub">Sin discos · Garantía 3 años</div>
+        <a href="https://paypal.me/DEVraler/1999" target="_blank" class="btn-buy">Comprar vía PayPal →</a>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<div class="divider"></div>
+
+<!-- DISCORD BOTS -->
+<section id="bots" style="background: var(--bg2); max-width: 100%; padding: 100px 0;">
+  <div style="max-width: 1400px; margin: 0 auto; padding: 0 48px;">
+    <div class="section-tag">// Discord Bots</div>
+    <h2 class="section-title">Membresías <span>Mensuales</span></h2>
+    <div class="sep-line"></div>
+    <p class="section-sub">Bots de Discord personalizados y listos para potenciar tu servidor. Pago mensual, cancela cuando quieras.</p>
+
+    <div class="plans-grid">
+
+      <!-- BASIC -->
+      <div class="plan-card plan-basic reveal">
+        <div class="plan-icon">🤖</div>
+        <div class="plan-name">Basic</div>
+        <p style="color: var(--muted); font-size: 0.85rem;">Para servidores pequeños y comunidades que empiezan.</p>
+        <div class="plan-price" style="--plan-color: #4ade80">4.99€</div>
+        <div class="plan-period">/ mes · facturado mensualmente</div>
+        <ul class="plan-features">
+          <li><span class="check">▸</span>1 Bot de Discord</li>
+          <li><span class="check">▸</span>Comandos estándar (20+)</li>
+          <li><span class="check">▸</span>Moderación básica</li>
+          <li><span class="check">▸</span>Sistema de bienvenida</li>
+          <li><span class="check">▸</span>Soporte por ticket</li>
+          <li><span class="check" style="color: var(--muted)">✕</span><span style="opacity:.4">Comandos personalizados</span></li>
+          <li><span class="check" style="color: var(--muted)">✕</span><span style="opacity:.4">Dashboard web</span></li>
+        </ul>
+        <a href="https://paypal.me/DEVraler/4.99" target="_blank" class="btn-plan btn-plan-basic">Suscribirse · Basic</a>
+      </div>
+
+      <!-- MID (Featured) -->
+      <div class="plan-card plan-mid featured reveal">
+        <div class="plan-featured-badge">⭐ MÁS POPULAR</div>
+        <div class="plan-icon">🚀</div>
+        <div class="plan-name">Mid</div>
+        <p style="color: var(--muted); font-size: 0.85rem;">La opción perfecta para la mayoría de comunidades activas.</p>
+        <div class="plan-price">9.99€</div>
+        <div class="plan-period">/ mes · facturado mensualmente</div>
+        <ul class="plan-features">
+          <li><span class="check">▸</span>1 Bot de Discord</li>
+          <li><span class="check">▸</span>Comandos estándar (50+)</li>
+          <li><span class="check">▸</span>Moderación avanzada</li>
+          <li><span class="check">▸</span>Sistema de bienvenida personalizado</li>
+          <li><span class="check">▸</span>5 Comandos personalizados</li>
+          <li><span class="check">▸</span>Dashboard web básico</li>
+          <li><span class="check" style="color: var(--muted)">✕</span><span style="opacity:.4">Comandos ilimitados</span></li>
+        </ul>
+        <a href="https://paypal.me/DEVraler/9.99" target="_blank" class="btn-plan btn-plan-mid">Suscribirse · Mid</a>
+      </div>
+
+      <!-- PRO -->
+      <div class="plan-card plan-pro reveal">
+        <div class="plan-icon">💎</div>
+        <div class="plan-name">Pro</div>
+        <p style="color: var(--muted); font-size: 0.85rem;">Para grandes comunidades y empresas que exigen lo mejor.</p>
+        <div class="plan-price" style="--plan-color: var(--accent2)">19.99€</div>
+        <div class="plan-period">/ mes · facturado mensualmente</div>
+        <ul class="plan-features">
+          <li><span class="check" style="color: var(--accent2)">▸</span>Hasta 3 Bots de Discord</li>
+          <li><span class="check" style="color: var(--accent2)">▸</span>Comandos ilimitados</li>
+          <li><span class="check" style="color: var(--accent2)">▸</span>Moderación IA avanzada</li>
+          <li><span class="check" style="color: var(--accent2)">▸</span>Sistema de economía y niveles</li>
+          <li><span class="check" style="color: var(--accent2)">▸</span>Comandos personalizados ilimitados</li>
+          <li><span class="check" style="color: var(--accent2)">▸</span>Dashboard web completo</li>
+          <li><span class="check" style="color: var(--accent2)">▸</span>Soporte prioritario 24/7</li>
+        </ul>
+        <a href="https://paypal.me/DEVraler/19.99" target="_blank" class="btn-plan btn-plan-pro">Suscribirse · Pro</a>
+      </div>
+
+    </div>
+
+    <!-- PAYPAL BANNER -->
+    <div class="paypal-banner reveal">
+      <div>
+        <div style="font-size: 2.5rem; margin-bottom: 8px;">💳</div>
+      </div>
+      <div class="paypal-info">
+        <h3>Pago 100% seguro con PayPal</h3>
+        <p>Todas las transacciones procesadas a través de <strong>paypal.me/DEVraler</strong> — protegido, rápido y sin sorpresas.</p>
+      </div>
+      <a href="https://paypal.me/DEVraler/" target="_blank" class="btn-paypal">Ir a PayPal →</a>
+    </div>
+
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- CONTACTO -->
+<section id="contacto">
+  <div class="section-tag">// Contacto</div>
+  <h2 class="section-title">¿Tienes <span>dudas?</span></h2>
+  <div class="sep-line"></div>
+  <p class="section-sub">Contacta con nosotros y te responderemos lo antes posible. También puedes abrir un ticket en nuestro servidor de Discord.</p>
+
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px;">
+
+    <div class="product-card" style="text-align: center;">
+      <span class="product-icon">📧</span>
+      <div class="product-name" style="font-size: 0.95rem;">Email</div>
+      <p class="product-desc">contact@raler.es</p>
+    </div>
+
+    <div class="product-card" style="text-align: center;">
+      <span class="product-icon">💬</span>
+      <div class="product-name" style="font-size: 0.95rem;">Discord</div>
+      <p class="product-desc">Servidor oficial disponible</p>
+    </div>
+
+    <div class="product-card" style="text-align: center;">
+      <span class="product-icon">💳</span>
+      <div class="product-name" style="font-size: 0.95rem;">PayPal</div>
+      <a href="https://paypal.me/DEVraler/" target="_blank" class="product-desc" style="color: var(--accent); text-decoration: none;">paypal.me/DEVraler</a>
+    </div>
+
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="nav-logo" style="font-size: 1.8rem;">InFormatics</div>
+      <p>Tu tienda de tecnología de confianza. Teléfonos, ordenadores, servidores, NAS y bots de Discord con garantía y soporte real.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Productos</h4>
+      <ul>
+        <li><a href="#productos">Smartphones</a></li>
+        <li><a href="#productos">Ordenadores</a></li>
+        <li><a href="#productos">Servidores</a></li>
+        <li><a href="#productos">NAS</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Discord Bots</h4>
+      <ul>
+        <li><a href="#bots">Plan Basic</a></li>
+        <li><a href="#bots">Plan Mid</a></li>
+        <li><a href="#bots">Plan Pro</a></li>
+        <li><a href="https://paypal.me/DEVraler/" target="_blank">Pagar con PayPal</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2025 <a href="#">informatics</a> — Todos los derechos reservados</p>
+    <p>Cookies gestionadas por <a href="#">informatics</a> · <a href="#">Política de privacidad</a></p>
+  </div>
+</footer>
+
+<!-- COOKIE BANNER -->
+<div id="cookie-banner">
+  <div class="cookie-icon">🍪</div>
+  <div class="cookie-text">
+    <strong>InFormatics usa cookies</strong>
+    <p>Usamos cookies propias y de terceros para mejorar tu experiencia. Consulta nuestra <a href="#">política de cookies</a>.</p>
+  </div>
+  <div class="cookie-btns">
+    <button class="btn-cookie-accept" onclick="acceptCookies()">Aceptar todo</button>
+    <button class="btn-cookie-reject" onclick="rejectCookies()">Rechazar</button>
+  </div>
+</div>
+
+<script>
+  // COOKIE BANNER
+  function setCookie(name, value, days) {
+    const d = new Date();
+    d.setTime(d.getTime() + days * 24 * 60 * 60 * 1000);
+    document.cookie = `${name}=${value};expires=${d.toUTCString()};domain=raler.es;path=/;SameSite=Lax`;
+  }
+
+  function getCookie(name) {
+    return document.cookie.split(';').some(c => c.trim().startsWith(name + '='));
+  }
+
+  function acceptCookies() {
+    setCookie('informatics_cookie_consent', 'accepted', 365);
+    setCookie('informatics_analytics', 'true', 365);
+    setCookie('informatics_session', 'active', 1);
+    document.getElementById('cookie-banner').classList.add('hidden');
+  }
+
+  function rejectCookies() {
+    setCookie('informatics_cookie_consent', 'rejected', 365);
+    document.getElementById('cookie-banner').classList.add('hidden');
+  }
+
+  // Check if already accepted
+  if (getCookie('informatics_cookie_consent')) {
+    document.getElementById('cookie-banner').classList.add('hidden');
+  }
+
+
+  // CATEGORY TABS
+  function showCat(cat) {
+    document.querySelectorAll('.cat-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.cat-tab').forEach(t => t.classList.remove('active'));
+    document.getElementById('cat-' + cat).classList.add('active');
+    event.currentTarget.classList.add('active');
+    // Re-trigger reveal animations
+    document.querySelectorAll('#cat-' + cat + ' .reveal').forEach((el, i) => {
+      el.classList.remove('visible');
+      setTimeout(() => el.classList.add('visible'), i * 80);
+    });
+  }
+
+  // SCROLL REVEAL
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 100);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  reveals.forEach(el => observer.observe(el));
+
+  // SMOOTH ANCHOR SCROLL
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      e.preventDefault();
+      const target = document.querySelector(a.getAttribute('href'));
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+</script>
+
+</body>
+</html>
